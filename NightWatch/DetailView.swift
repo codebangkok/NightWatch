@@ -2,7 +2,7 @@
 //  DetailView.swift
 //  NightWatch
 //
-//  Created by Bond on 3/2/2564 BE.
+//  Created by Bannasarn Boonmee on 3/2/2564 BE.
 //
 
 import SwiftUI
@@ -10,6 +10,7 @@ import SwiftUI
 struct DetailView: View {
     
     @ObservedObject var task: Task
+    
     @Environment(\.presentationMode) var mode
     
     var body: some View {
