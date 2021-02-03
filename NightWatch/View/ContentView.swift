@@ -21,12 +21,9 @@ struct ContentView: View {
                 }) {
                     ForEach(nightWatchTask.nightlyTasks) { (task) in
                         NavigationLink(
-                            destination: Text(task.name),
+                            destination: DetailView(task: task),
                             label: {
-                                HStack {
-                                    Image(systemName: "square")
-                                    Text(task.name)
-                                }
+                                TaskRowView(task: task)
                             })
                     }
                 }
@@ -37,12 +34,9 @@ struct ContentView: View {
                 }) {
                     ForEach(nightWatchTask.weeklyTasks) { (task) in
                         NavigationLink(
-                            destination: Text(task.name),
+                            destination: DetailView(task: task),
                             label: {
-                                HStack {
-                                    Image(systemName: "square")
-                                    Text(task.name)
-                                }
+                                TaskRowView(task: task)
                             })
                     }
                 }
@@ -53,12 +47,9 @@ struct ContentView: View {
                 }) {
                     ForEach(nightWatchTask.monthlyTasks) { (task) in
                         NavigationLink(
-                            destination: Text(task.name),
+                            destination: DetailView(task: task),
                             label: {
-                                HStack {
-                                    Image(systemName: "square")
-                                    Text(task.name)
-                                }
+                                TaskRowView(task: task)
                             })
                     }
                 }
@@ -250,6 +241,9 @@ struct ContentView_Previews: PreviewProvider {
 //
 //    }
 //}
+
+
+
 
 
 

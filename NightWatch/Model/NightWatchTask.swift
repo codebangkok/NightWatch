@@ -8,7 +8,8 @@
 import Foundation
 
 class NightWatchTask: ObservableObject {
-    @Published var nightlyTasks = [Task(name: "Check all doors", isComplete: false),
+    @Published var nightlyTasks = [Task(name: "Check all windows", isComplete: false),
+                                   Task(name: "Check all doors", isComplete: false),
                                    Task(name: "Check that the safe is locked", isComplete: false),
                                    Task(name: "Check the mailbox", isComplete: false),
                                    Task(name: "Inspect security cameras", isComplete: false),
