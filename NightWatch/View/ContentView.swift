@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     
     @ObservedObject var nightWatchTask: NightWatchTask
+    @State private var isFocusMode = false
+    @State private var isResetAlert = false
     
     var body: some View {
 
@@ -20,12 +22,19 @@ struct ContentView: View {
                     Text("Nightly Tasks").font(.title3).foregroundColor(.yellow).underline().fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 }) {
                     ForEach(nightWatchTask.nightlyTasks) { (task) in
-                        NavigationLink(
-                            destination: DetailView(task: task),
-                            label: {
-                                TaskRowView(task: task)
-                            })
-                    }
+                        
+                        if !isFocusMode || (isFocusMode && !task.isComplete) {
+                            NavigationLink(
+                                destination: DetailView(task: task),
+                                label: {
+                                    TaskRowView(task: task)
+                                })
+                        }
+                    }.onDelete(perform: { indexSet in
+                        nightWatchTask.nightlyTasks.remove(atOffsets: indexSet)
+                    }).onMove(perform: { indices, newOffset in
+                        nightWatchTask.nightlyTasks.move(fromOffsets: indices, toOffset: newOffset)
+                    })
                 }
 
                 Section(header: HStack {
@@ -33,12 +42,18 @@ struct ContentView: View {
                     Text("Weekly Tasks").font(.title3).foregroundColor(.yellow).underline().fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 }) {
                     ForEach(nightWatchTask.weeklyTasks) { (task) in
-                        NavigationLink(
-                            destination: DetailView(task: task),
-                            label: {
-                                TaskRowView(task: task)
-                            })
-                    }
+                        if !isFocusMode || (isFocusMode && !task.isComplete) {
+                            NavigationLink(
+                                destination: DetailView(task: task),
+                                label: {
+                                    TaskRowView(task: task)
+                                })
+                        }
+                    }.onDelete(perform: { indexSet in
+                        nightWatchTask.nightlyTasks.remove(atOffsets: indexSet)
+                    }).onMove(perform: { indices, newOffset in
+                        nightWatchTask.nightlyTasks.move(fromOffsets: indices, toOffset: newOffset)
+                    })
                 }
 
                 Section(header: HStack {
@@ -46,18 +61,44 @@ struct ContentView: View {
                     Text("Monthly Tasks").font(.title3).foregroundColor(.yellow).underline().fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 }) {
                     ForEach(nightWatchTask.monthlyTasks) { (task) in
-                        NavigationLink(
-                            destination: DetailView(task: task),
-                            label: {
-                                TaskRowView(task: task)
-                            })
-                    }
+                        if !isFocusMode || (isFocusMode && !task.isComplete) {
+                            NavigationLink(
+                                destination: DetailView(task: task),
+                                label: {
+                                    TaskRowView(task: task)
+                                })
+                        }
+                    }.onDelete(perform: { indexSet in
+                        nightWatchTask.nightlyTasks.remove(atOffsets: indexSet)
+                    }).onMove(perform: { indices, newOffset in
+                        nightWatchTask.nightlyTasks.move(fromOffsets: indices, toOffset: newOffset)
+                    })
                 }
             }
             .listStyle(GroupedListStyle())
             .navigationTitle("Home")
+            .toolbar{
+                ToolbarItem(placement: .bottomBar) {
+                    Toggle("Focus Mode", isOn: $isFocusMode)
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    EditButton()
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Reset") {
+                        isResetAlert = true
+                    }
+                }
+            }
         }
-
+        .alert(isPresented: $isResetAlert) {
+            Alert(title: Text("Reset List"), message: Text("Are you sure?"), primaryButton: .cancel(), secondaryButton: .destructive(Text("Yes"), action: {
+                let newTasks = NightWatchTask()
+                nightWatchTask.nightlyTasks = newTasks.nightlyTasks
+                nightWatchTask.weeklyTasks = newTasks.weeklyTasks
+                nightWatchTask.monthlyTasks =  newTasks.monthlyTasks
+            }))
+        }
     }
 }
 

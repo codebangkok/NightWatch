@@ -10,6 +10,7 @@ import SwiftUI
 struct DetailView: View {
     
     @ObservedObject var task: Task
+    @Environment(\.presentationMode) var mode
     
     var body: some View {
         VStack {
@@ -19,6 +20,7 @@ struct DetailView: View {
             }
             Button(task.isComplete ? "Reset" : "Mark Complete") {
                 task.isComplete = !task.isComplete
+                mode.wrappedValue.dismiss()
             }.padding()
         }
     }
