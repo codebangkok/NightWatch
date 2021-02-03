@@ -7,19 +7,10 @@
 
 import SwiftUI
 
-let nightlyTasks = ["Check all doors",
-                 "Check that the safe is locked",
-                 "Check the mailbox",
-                 "Inspect security cameras",
-                 "Clear ice from sidewalks",
-                 "Document strange and unusual occurrences"]
-let weeklyTasks = ["Check inside all vacant rooms",
-                   "Walk the perimeter of property"]
-let monthlyTasks = ["Test security alarm",
-                    "Test motion detectors",
-                    "Test smoke alarms"]
-
 struct ContentView: View {
+    
+    @ObservedObject var nightWatchTask: NightWatchTask
+    
     var body: some View {
 
         NavigationView {
@@ -28,8 +19,15 @@ struct ContentView: View {
                     Text(Image(systemName: "moon.stars")).font(.title3).foregroundColor(.yellow).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                     Text("Nightly Tasks").font(.title3).foregroundColor(.yellow).underline().fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 }) {
-                    ForEach(nightlyTasks, id: \.self) {
-                        NavigationLink($0, destination: Text($0))
+                    ForEach(nightWatchTask.nightlyTasks) { (task) in
+                        NavigationLink(
+                            destination: Text(task.name),
+                            label: {
+                                HStack {
+                                    Image(systemName: "square")
+                                    Text(task.name)
+                                }
+                            })
                     }
                 }
 
@@ -37,8 +35,15 @@ struct ContentView: View {
                     Text(Image(systemName: "sunset")).font(.title3).foregroundColor(.yellow).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                     Text("Weekly Tasks").font(.title3).foregroundColor(.yellow).underline().fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 }) {
-                    ForEach(weeklyTasks, id: \.self) {
-                        NavigationLink($0, destination: Text($0))
+                    ForEach(nightWatchTask.weeklyTasks) { (task) in
+                        NavigationLink(
+                            destination: Text(task.name),
+                            label: {
+                                HStack {
+                                    Image(systemName: "square")
+                                    Text(task.name)
+                                }
+                            })
                     }
                 }
 
@@ -46,8 +51,15 @@ struct ContentView: View {
                     Text(Image(systemName: "calendar")).font(.title3).foregroundColor(.yellow).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                     Text("Monthly Tasks").font(.title3).foregroundColor(.yellow).underline().fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 }) {
-                    ForEach(monthlyTasks, id: \.self) {
-                        NavigationLink($0, destination: Text($0))
+                    ForEach(nightWatchTask.monthlyTasks) { (task) in
+                        NavigationLink(
+                            destination: Text(task.name),
+                            label: {
+                                HStack {
+                                    Image(systemName: "square")
+                                    Text(task.name)
+                                }
+                            })
                     }
                 }
             }
@@ -58,6 +70,75 @@ struct ContentView: View {
     }
 }
 
+//MARK: Preview
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+
+        let nightWatchTask = NightWatchTask()
+        ContentView(nightWatchTask: nightWatchTask)
+    }
+}
+
+
+//struct ContentView: View {
+//
+//    @EnvironmentObject var task: Task
+//
+//    var body: some View {
+//
+//        VStack {
+//            HStack {
+//                Image(systemName: task.isComplete ? "checkmark.square" : "square")
+//                Text(task.name)
+//            }
+//            ControlView()
+//        }
+//    }
+//}
+
+//struct ControlView: View {
+//
+//    @EnvironmentObject var task: Task
+//
+//    var body: some View {
+//        Button(task.isComplete ? "Reset" : "Mark Complete") {
+//            task.isComplete = !task.isComplete
+//        }.padding()
+//    }
+//}
+//
+
+//struct ContentView: View {
+//
+//    @StateObject private var task = Task(name: "Check all windows", isComplete: false)
+//
+//    var body: some View {
+//
+//        VStack {
+//            HStack {
+//                Image(systemName: task.isComplete ? "checkmark.square" : "square")
+//                Text(task.name)
+//            }
+//            ControlView(task: task)
+//        }
+//    }
+//}
+//
+//struct ControlView: View {
+//
+//    @ObservedObject var task: Task
+//
+//    var body: some View {
+//        Button(task.isComplete ? "Reset" : "Mark Complete") {
+//            task.isComplete = !task.isComplete
+//        }.padding()
+//    }
+//}
+
+
+
+
+//TODO: To do something
 //struct ContentView: View {
 //    var body: some View {
 //
@@ -79,6 +160,7 @@ struct ContentView: View {
 //}
 
 
+//MARK: ContentView
 //struct ContentView: View {
 //    var body: some View {
 //
@@ -115,6 +197,7 @@ struct ContentView: View {
 //    }
 //}
 
+//FIXME: Fix Bug
 //struct ContentView: View {
 //    var body: some View {
 //
@@ -168,10 +251,7 @@ struct ContentView: View {
 //    }
 //}
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .previewDevice("iPhone 12 Pro Max")
-    }
-}
+
+
+
 
